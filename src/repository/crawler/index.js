@@ -6,8 +6,8 @@ class CrawlerRepository {
     this.repository = makeRepository(fastify);
   }
 
-  selectCrawlerPaths(fastify) {
-    return this.repository.selectCrawlerPaths(fastify);
+  selectCrawlerPaths(sellerId) {
+    return this.repository.selectCrawlerPaths(sellerId);
   }
 }
 

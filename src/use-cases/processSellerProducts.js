@@ -22,14 +22,18 @@ const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
 };
 
 const processSellerProducts = async (sellerId, repositories) => {
-  // Get seller crawler paths from db
   const crawlerPaths = await repositories.crawlerRepository.selectCrawlerPaths(sellerId);
-  const products = repositories.productRepository.sellectProductsBySeller(sellerId);
+  const products = await repositories.productRepository.sellectProductsBySeller(sellerId);
 
   // Get product list from repo by sellerId from db
   await products.forEach(async (product) => {
-    const crawledProduct = await getSingleProductDataFromUrl(product.url, crawlerPaths);
-    repositories.productRepository.insertSellerProduct(crawledProduct);
+    const { price, sku } = await getSingleProductDataFromUrl(product.url, crawlerPaths);
+    const productToSave = {
+      ...product,
+      price,
+      sku,
+    };
+    await repositories.productRepository.insertSellerProduct(productToSave);
   });
 };
 

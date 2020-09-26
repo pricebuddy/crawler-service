@@ -33,7 +33,7 @@ const processSellerProducts = async (sellerId, repositories) => {
       price,
       sku,
     };
-    await repositories.productRepository.insertSellerProduct(productToSave);
+    await repositories.productRepository.updateSellerProduct(productToSave);
   });
 };
 

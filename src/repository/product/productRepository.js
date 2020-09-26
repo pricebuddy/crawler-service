@@ -10,17 +10,17 @@ const makeRepository = (fastify) => {
     return res;
   };
 
-  const insertSellerProduct = async (product) => {
+  const updateSellerProduct = async (product) => {
     const { db } = fastify.mongo;
 
     const collection = db.collection('products');
 
-    const res = await collection.updateOne(product);
+    const res = await collection.save(product);
 
     return res;
   };
 
-  return { insertSellerProduct, sellectProductsBySeller };
+  return { sellectProductsBySeller, updateSellerProduct };
 };
 
 module.exports = makeRepository;

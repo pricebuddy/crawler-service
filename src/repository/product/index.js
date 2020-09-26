@@ -6,8 +6,8 @@ class ProductRepository {
     this.repository = makeRepository(fastify);
   }
 
-  insertSellerProduct(product) {
-    return this.repository.insertSellerProduct(product);
+  updateSellerProduct(product) {
+    return this.repository.updateSellerProduct(product);
   }
 
   sellectProductsBySeller(sellerId) {

@@ -2,7 +2,7 @@ const Fastify = require('fastify');
 const faker = require('faker');
 const ProductRepository = require('..');
 
-describe('Organization Repository', () => {
+describe('Product repository', () => {
   let fastify;
   let productRepository;
 

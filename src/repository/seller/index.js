@@ -6,8 +6,8 @@ class SellerRepository {
     this.repository = makeRepository(fastify);
   }
 
-  selectSeller(product) {
-    return this.repository.selectSeller(product);
+  selectAll() {
+    return this.repository.selectAll();
   }
 }
 

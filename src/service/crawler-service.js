@@ -5,7 +5,7 @@ const { processSellerProducts } = require('../use-cases/process-seller-products'
 
 const crawlerService = async (fastify) => {
   const domainRepository = new DomainRepository(fastify);
-  const allSellers = await getAllSellers();
+  const allSellers = await getAllSellers(domainRepository);
 
   const response = await allSellers.forEach(async (seller) => {
     await processSellerProducts(seller.id, domainRepository);

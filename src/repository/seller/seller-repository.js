@@ -1,16 +1,15 @@
 const makeRepository = (fastify) => {
-  const selectSeller = async (id) => {
+  const selectAll = async () => {
     const { db } = fastify.mongo;
 
     const collection = db.collection('sellers');
-    const query = { id };
 
-    const res = await collection.findOne(query);
+    const res = await collection.find();
 
     return res;
   };
 
-  return { selectSeller };
+  return { selectAll };
 };
 
 module.exports = makeRepository;

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const dom = require('xmldom').DOMParser;
+const Dom = require('xmldom').DOMParser;
 const xpath = require('xpath');
 
 const docSilentHandler = {
@@ -13,7 +13,7 @@ const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
   const { pricePath, skuPath } = crawlerPaths;
 
   const response = await axios.get(url);
-  const doc = new dom({
+  const doc = new Dom({
     locator: {},
     errorHandler: docSilentHandler,
   }).parseFromString(response.data);

@@ -66,8 +66,10 @@ describe('Should crawl single page', () => {
 
     await processSellerProducts(sellerId, mockDomainRepositories, fastify);
 
-    expect(mockDomainRepositories.crawlerRepository.selectCrawlerPaths).toHaveBeenCalledWith(sellerId);
-    expect(mockDomainRepositories.productRepository.sellectProductsBySeller).toHaveBeenCalledWith(sellerId);
+    expect(mockDomainRepositories.crawlerRepository.selectCrawlerPaths)
+      .toHaveBeenCalledWith(sellerId);
+    expect(mockDomainRepositories.productRepository.sellectProductsBySeller)
+      .toHaveBeenCalledWith(sellerId);
     expect(mockDomainRepositories.productRepository.updateSellerProduct).toHaveBeenCalledTimes(3);
   });
 });

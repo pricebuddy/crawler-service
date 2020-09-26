@@ -11,6 +11,7 @@ RUN npm install
 # RUN npm ci --only=production
 
 ENV APP_PORT=3000
+ENV MONGO_HOST=$MONGO_HOST
 
 EXPOSE 3000
 CMD [ "npm", "start" ]

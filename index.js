@@ -2,6 +2,8 @@ const log = require('pino')({ level: 'info' });
 const fastify = require('fastify')({ logger: log });
 const fastifyCron = require('fastify-cron');
 
+const port = process.env.PORT || 3000;
+const mongoUrl = process.env.MONGO_HOST ? `mongodb://${process.env.MONGO_HOST}:27017/buddy` : 'mongodb://localhost:27017/buddy';
 const { crawlerService } = require('./src/service/crawlerService');
 
 fastify.get('/', (request, reply) => {
@@ -26,7 +28,7 @@ fastify.register(require('fastify-mongodb'), {
   // force to close the mongodb connection when app stopped
   // the default value is false
   forceClose: true,
-  url: process.env.MONGO_URL || 'mongodb://localhost:27017/buddy',
+  url: mongoUrl,
 });
 
 fastify.get('/test', async (req, reply) => {
@@ -34,7 +36,7 @@ fastify.get('/test', async (req, reply) => {
   reply.send(result);
 });
 
-fastify.listen(3000, (err, address) => {
+fastify.listen(port, (err, address) => {
   if (err) {
     fastify.log.error(err);
     process.exit(1);

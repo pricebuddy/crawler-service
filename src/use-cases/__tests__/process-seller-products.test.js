@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Fastify = require('fastify');
 
 jest.mock('axios');
 
@@ -34,6 +35,12 @@ const fakeProducts = [
 ];
 
 describe('Should crawl single page', () => {
+  let fastify;
+
+  beforeEach(async () => {
+    fastify = Fastify();
+  });
+
   it('should get info from a url and get name and price', async () => {
     const url = 'http://foo.bar/product1';
     const crawlerPaths = {
@@ -57,7 +64,7 @@ describe('Should crawl single page', () => {
     mockDomainRepositories.productRepository.sellectProductsBySeller.mockReturnValue(fakeProducts);
     mockDomainRepositories.crawlerRepository.selectCrawlerPaths.mockReturnValue(fakeCrawlerPaths);
 
-    await processSellerProducts(sellerId, mockDomainRepositories);
+    await processSellerProducts(sellerId, mockDomainRepositories, fastify);
 
     expect(mockDomainRepositories.crawlerRepository.selectCrawlerPaths).toHaveBeenCalledWith(sellerId);
     expect(mockDomainRepositories.productRepository.sellectProductsBySeller).toHaveBeenCalledWith(sellerId);

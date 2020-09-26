@@ -8,7 +8,7 @@ const crawlerService = async (fastify) => {
   const allSellers = await getAllSellers(domainRepository);
 
   const response = await allSellers.forEach(async (seller) => {
-    await processSellerProducts(seller.id, domainRepository);
+    await processSellerProducts(seller.id, domainRepository, fastify);
   });
 
   return response;

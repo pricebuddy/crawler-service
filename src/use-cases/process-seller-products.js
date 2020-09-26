@@ -21,19 +21,22 @@ const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
   return product;
 };
 
-const processSellerProducts = async (sellerId, repositories) => {
+const processSellerProducts = async (sellerId, repositories, fastify) => {
   const crawlerPaths = await repositories.crawlerRepository.selectCrawlerPaths(sellerId);
   const products = await repositories.productRepository.sellectProductsBySeller(sellerId);
 
-  // Get product list from repo by sellerId from db
   await products.forEach(async (product) => {
-    const { price, sku } = await getSingleProductDataFromUrl(product.url, crawlerPaths);
+    const { url } = product;
+
+    const { price, sku } = await getSingleProductDataFromUrl(url, crawlerPaths);
     const productToSave = {
       ...product,
       price,
       sku,
     };
     await repositories.productRepository.updateSellerProduct(productToSave);
+    fastify.log.info(productToSave);
+    return productToSave;
   });
 };
 

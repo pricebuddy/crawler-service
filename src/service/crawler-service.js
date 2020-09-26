@@ -1,15 +1,17 @@
 const DomainRepository = require('../repository/domain-repositories');
 
+const { getAllSellers } = require('../use-cases/get-sellers');
 const { processSellerProducts } = require('../use-cases/process-seller-products');
 
 const crawlerService = async (fastify) => {
   const domainRepository = new DomainRepository(fastify);
+  const allSellers = await getAllSellers();
 
-  const sellerIds = ['13C4B1AA-30DB-4AFB-9FC6-FB913999A86B', '38B93994-CC0B-4780-8266-B9123953D75A'];
+  const response = await allSellers.forEach(async (seller) => {
+    await processSellerProducts(seller.id, domainRepository);
+  });
 
-  const response = await processSellerProducts(sellerIds[0], domainRepository);
-
-  return { response };
+  return response;
 };
 
 module.exports = {

@@ -1,10 +1,10 @@
 How to build docker image locally:
 
-docker build -t crawler-service .
+`docker build -t crawler-service .`
 
 How to run using docker locally:
 
-docker run --init -p 3000:3000 -e "MONGO_HOST=host.docker.internal" crawler-service
+`docker run --init -p 3000:3000 -e "MONGO_HOST=host.docker.internal" crawler-service`
 
 
 

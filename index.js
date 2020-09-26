@@ -4,7 +4,7 @@ const fastifyCron = require('fastify-cron');
 
 const port = process.env.PORT || 3000;
 const mongoUrl = process.env.MONGO_HOST ? `mongodb://${process.env.MONGO_HOST}:27017/buddy` : 'mongodb://localhost:27017/buddy';
-const { crawlerService } = require('./src/service/crawlerService');
+const { crawlerService } = require('./src/service/crawler-service');
 
 fastify.get('/', (request, reply) => {
   reply.send({ hello: 'world' });

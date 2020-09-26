@@ -1,4 +1,4 @@
-const makeRepository = require('./productRepository');
+const makeRepository = require('./product-repository');
 
 class ProductRepository {
   constructor(fastify) {

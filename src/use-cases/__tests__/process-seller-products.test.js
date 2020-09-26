@@ -2,7 +2,7 @@ const axios = require('axios');
 
 jest.mock('axios');
 
-const { getSingleProductDataFromUrl, processSellerProducts } = require('../processSellerProducts');
+const { getSingleProductDataFromUrl, processSellerProducts } = require('../process-seller-products');
 const testData = require('./parisResponse');
 
 const mockDomainRepositories = {
@@ -11,8 +11,8 @@ const mockDomainRepositories = {
   },
 
   productRepository: {
-    insertSellerProduct: jest.fn(),
     sellectProductsBySeller: jest.fn(),
+    updateSellerProduct: jest.fn(),
   },
 };
 
@@ -61,6 +61,6 @@ describe('Should crawl single page', () => {
 
     expect(mockDomainRepositories.crawlerRepository.selectCrawlerPaths).toHaveBeenCalledWith(sellerId);
     expect(mockDomainRepositories.productRepository.sellectProductsBySeller).toHaveBeenCalledWith(sellerId);
-    expect(mockDomainRepositories.productRepository.insertSellerProduct).toHaveBeenCalledTimes(3);
+    expect(mockDomainRepositories.productRepository.updateSellerProduct).toHaveBeenCalledTimes(3);
   });
 });

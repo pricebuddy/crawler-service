@@ -1,4 +1,4 @@
-const makeRepository = require('./crawlerRepository');
+const makeRepository = require('./crawler-repository');
 
 class CrawlerRepository {
   constructor(fastify) {

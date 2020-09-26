@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "npm run test:unit",
     "test:unit": "jest -c jest.config.unit.js",
     "start": "node index.js"
@@ -18,5 +19,30 @@
     "jest-mock-axios": "^4.2.1",
     "xmldom": "^0.3.0",
     "xpath": "0.0.29"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-google": "^0.14.0"
+  },"eslintConfig": {
+    "root": true,
+    "env": {
+      "es6": true,
+      "jest/globals": true,
+      "node": true
+    },
+    "plugins": [
+      "jest",
+      "prettier"
+    ],
+    "extends": [
+      "plugin:prettier/recommended",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5"
   }
 }

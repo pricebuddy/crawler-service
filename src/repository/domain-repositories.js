@@ -1,8 +1,8 @@
-const CrawlerRepository = require('./crawlerRepository');
+const CrawlerRepository = require('./crawler');
 
 function DomainRepositories(fastify) {
   return {
-    userRepository: new CrawlerRepository(fastify),
+    crawlerRepository: new CrawlerRepository(fastify),
   };
 }
 

@@ -23,7 +23,7 @@ const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
 
 const processSellerProducts = async (sellerId, repositories) => {
   // Get seller crawler paths from db
-  const crawlerPaths = repositories.crawlerRepository.selectCrawlerPaths(sellerId);
+  const crawlerPaths = await repositories.crawlerRepository.selectCrawlerPaths(sellerId);
   const products = repositories.productRepository.sellectProductsBySeller(sellerId);
 
   // Get product list from repo by sellerId from db

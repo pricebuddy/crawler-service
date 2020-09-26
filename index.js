@@ -2,7 +2,7 @@ const log = require('pino')({ level: 'info' });
 const fastify = require('fastify')({ logger: log });
 const fastifyCron = require('fastify-cron');
 
-const { processSellerProducts } = require('./src/service/crawlerService');
+const { crawlerService } = require('./src/service/crawlerService');
 
 fastify.get('/', (request, reply) => {
   reply.send({ hello: 'world' });
@@ -15,7 +15,7 @@ fastify.register(fastifyCron, {
       cronTime: '*/1 * * * *', // every 1 min
       onTick: async (server) => {
         server.log.info('Cron tick');
-        const result = await processSellerProducts();
+        const result = await crawlerService(server);
         server.log.info(result);
       },
     },
@@ -30,19 +30,9 @@ fastify.register(require('fastify-mongodb'), {
   url: 'mongodb://localhost:27017/buddy',
 });
 
-fastify.get('/seller/:id', function (req, reply) {
-  // Or this.mongo.client.db('mydb')
-  const { db } = this.mongo;
-
-  function onCollection(err, col) {
-    if (err) return reply.send(err);
-
-    col.findOne({ id: req.params.id }, (err, seller) => {
-      reply.send(seller);
-    });
-  }
-
-  db.collection('sellers', onCollection);
+fastify.get('/test', async (req, reply) => {
+  const result = await crawlerService(fastify);
+  reply.send(result);
 });
 
 fastify.listen(3000, (err, address) => {

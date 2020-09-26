@@ -2,7 +2,12 @@ const axios = require('axios');
 const dom = require('xmldom').DOMParser;
 const xpath = require('xpath');
 
-// crawl by url on demand
+const docSilentHandler = {
+  warning(w) { },
+  error(e) { },
+  fatalError(e) { },
+};
+
 const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
   const product = {};
   const { pricePath, skuPath } = crawlerPaths;
@@ -10,11 +15,7 @@ const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
   const response = await axios.get(url);
   const doc = new dom({
     locator: {},
-    errorHandler: {
-      warning(w) { },
-      error(e) { },
-      fatalError(e) { console.error(e); },
-    },
+    errorHandler: docSilentHandler,
   }).parseFromString(response.data);
   product.price = xpath.select(pricePath, doc).trim().split('$')[1].replace('.', '');
   product.sku = xpath.select(skuPath, doc).replace('SKU ', '');

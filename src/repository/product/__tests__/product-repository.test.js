@@ -1,5 +1,5 @@
-const Fastify = require('fastify');
 const faker = require('faker');
+const Fastify = require('fastify');
 const ProductRepository = require('..');
 
 describe('Product repository', () => {
@@ -12,6 +12,7 @@ describe('Product repository', () => {
       db: {
         collection: jest.fn().mockReturnThis(),
         find: jest.fn(),
+        save: jest.fn(),
       },
     };
     productRepository = new ProductRepository(fastify);
@@ -28,6 +29,14 @@ describe('Product repository', () => {
       await productRepository.sellectProductsBySeller(sellerId);
 
       expect(fastify.mongo.db.find).toHaveBeenCalledWith({ sellerId });
+    });
+
+    it('should call save product', async () => {
+      const product = {};
+
+      await productRepository.updateSellerProduct(product);
+
+      expect(fastify.mongo.db.save).toHaveBeenCalledWith(product);
     });
   });
 });

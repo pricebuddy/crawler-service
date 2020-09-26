@@ -5,21 +5,22 @@ Marketplaces/Tenant: {
     linio,
 }
 
-- Sellers
+- Tenant
     - id
     - name
     - url
+    - country
 
 - My Sellers
     - id
     - idSeller
 
-- masteProduct
+- masterProduct
     - id
     - nombre
     - thumbnailUrl
 
-- childProduct
+- sellerProduct
     - id: 123
     - sku: 000
     - masteProductId
@@ -44,21 +45,21 @@ Marketplaces/Tenant: {
     - skuPath
     - sellerId
 
-- Rules
-
 ---
 
 Stock - zone - product - shippingPrice
 
-A futuro availability zones por producto:
+- A futuro availability zones por producto:
 
 availabilityZones: {
     {
         zone: RM,
-        shippingPrice: 12
-    }
+        shippingPrice: 12 // Del producto
+    },
     {
         zone: 1,
         shippingPrice: 8
     }
 }
+
+- No estamos considerando variantes

@@ -4,6 +4,9 @@
         "commonjs": true,
         "es6": true
     },
+    "extends": [
+        "airbnb-base"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -12,5 +15,6 @@
         "ecmaVersion": 2018
     },
     "rules": {
-    }
+    },
+    "plugins": ["jest"]
 }

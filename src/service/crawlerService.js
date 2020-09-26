@@ -6,6 +6,12 @@ const xpath = require('xpath');
 
 // read db for competitor products and iterate through url
 const processSellerProducts = (sellerId) => {
+    // Get seller crawler paths
+    const crawlerPaths = {
+        pricePath: "string(//div[@class='item-price offer-price price-tc cencosud-price-2']/text())",
+        skuPath: "string(//p[@class='pull-right']/text())"
+    }
+
     // Get product list from repo by sellerId
     const products = [
         {
@@ -18,18 +24,16 @@ const processSellerProducts = (sellerId) => {
     // iterate
     for (const product of products){
         // call getSingleProductDataFromUrl with prod url
-        const crawledPrice = getSingleProductDataFromUrl(product.url);
+        const crawledPrice = getSingleProductDataFromUrl(product.url, crawlerPaths);
         // save price and sku on db
     }
 }
 
-const pricePath = "string(//div[@class='item-price offer-price price-tc cencosud-price-2']/text())"
-const skuPath = "string(//p[@class='pull-right']/text())"
-
 // crawl by url on demand
-const getSingleProductDataFromUrl = async (url) => {
+const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
 
     const product = {};
+    const { pricePath, skuPath} = crawlerPaths;
 
     const response = await axios.get(url);
     const doc = new dom().parseFromString(response.data, "text/xml");

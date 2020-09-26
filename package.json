@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test:unit",
+    "test:unit": "jest -c jest.config.unit.js",
     "start": "node index.js"
   },
   "author": "",
@@ -13,6 +14,8 @@
     "axios": "^0.20.0",
     "cheerio": "^1.0.0-rc.3",
     "crawler": "^1.2.2",
+    "jest": "^26.4.2",
+    "jest-mock-axios": "^4.2.1",
     "xmldom": "^0.3.0",
     "xpath": "0.0.29"
   }

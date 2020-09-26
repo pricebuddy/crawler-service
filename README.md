@@ -1,3 +1,11 @@
+Run tests:
+
+`npm run test`
+
+Run app locally:
+
+`npm start`
+
 How to build docker image locally:
 
 `docker build -t crawler-service .`

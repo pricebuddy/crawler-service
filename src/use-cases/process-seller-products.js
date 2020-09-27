@@ -57,20 +57,19 @@ const processAllyProducts = async (sellerId, repositories, fastify) => {
   for (const product of products) {
     const { url } = product;
 
-    fastify.log.info(`CRAWLING PAGE: ${url}`);
-
+    
     const { price, name } = await getSingleProductDataFromMasterUrl(url, crawlerPaths);
     const productToSave = {
       ...product,
       price,
     };
-
+    
     const masterProductToSave = {
       id: product.parentId,
       name,
     };
-
-    fastify.log.info(`PRICE UPDATED: ${price}`);
+    
+    fastify.log.info(`CRAWLING PAGE: ${url} --- PRICE UPDATED: ${price}`);
 
     await Promise.all([repositories.productRepository.updateSellerProduct(productToSave),
       repositories.productRepository.updateMasterProduct(masterProductToSave)]);
@@ -84,15 +83,15 @@ const processCompetitorProducts = async (sellerId, repositories, fastify) => {
   for (const product of products) {
     const { url } = product;
 
-    fastify.log.info(`CRAWLING PAGE: ${url}`);
-
+    
     const { price, sku } = await getSingleProductDataFromUrl(url, crawlerPaths);
     const productToSave = {
       ...product,
       price,
       sku,
     };
-    fastify.log.info(`PRICE UPDATED: ${price}`);
+
+    fastify.log.info(`CRAWLING PAGE: ${url} --- PRICE UPDATED: ${price}`);
 
     await repositories.productRepository.updateSellerProduct(productToSave);
     await waitforme(500);

@@ -1,6 +1,11 @@
-const getAllSellers = async (repositories) => {
-  const response = await repositories.sellerRepository.selectAll();
+const getAllySellers = async (repositories) => {
+  const response = await repositories.sellerRepository.selectAllies();
   return response;
 };
 
-module.exports = { getAllSellers };
+const getCompetitorSellers = async (repositories) => {
+  const response = await repositories.sellerRepository.selectCompetitors();
+  return response;
+};
+
+module.exports = { getAllySellers, getCompetitorSellers };

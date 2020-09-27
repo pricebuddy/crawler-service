@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 const axios = require('axios');
 const Dom = require('xmldom').DOMParser;
 const xpath = require('xpath');
@@ -8,26 +10,79 @@ const docSilentHandler = {
   fatalError(e) { },
 };
 
-const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
+function waitforme(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => { resolve(''); }, ms);
+  });
+}
+
+const getSingleProductDataFromMasterUrl = async (url, crawlerPaths) => {
   const product = {};
-  const { pricePath, skuPath } = crawlerPaths;
+  const { pricePath, namePath } = crawlerPaths;
 
   const response = await axios.get(url);
   const doc = new Dom({
     locator: {},
     errorHandler: docSilentHandler,
   }).parseFromString(response.data);
-  product.price = xpath.select(pricePath, doc).trim().split('$')[1].replace('.', '');
-  product.sku = xpath.select(skuPath, doc).replace('SKU ', '');
+  product.name = xpath.select(namePath, doc).trim();
+  product.price = xpath.select(pricePath, doc).trim().split('$')[1].replace(/\./g, '');
   return product;
 };
 
-const processSellerProducts = async (sellerId, repositories, fastify) => {
+const getSingleProductDataFromUrl = async (url, crawlerPaths) => {
+  const product = {};
+  const { internetPricePath, cardPricePath, skuPath } = crawlerPaths;
+
+  const response = await axios.get(url);
+  const doc = new Dom({
+    locator: {},
+    errorHandler: docSilentHandler,
+  }).parseFromString(response.data);
+  const internetPriceRaw = xpath.select(internetPricePath, doc);
+  const internetPrice = internetPriceRaw === '' ? internetPriceRaw : internetPriceRaw.trim().split('$')[1].replace(/\./g, '');
+  const cardPriceRaw = xpath.select(cardPricePath, doc);
+  const cardPrice = cardPriceRaw === '' ? cardPriceRaw : cardPriceRaw.trim().split('$')[1].replace(/\./g, '');
+
+  product.sku = xpath.select(skuPath, doc).replace('SKU ', '');
+  product.price = cardPrice || internetPrice;
+
+  return product;
+};
+
+const processAllyProducts = async (sellerId, repositories, fastify) => {
   const crawlerPaths = await repositories.crawlerRepository.selectCrawlerPaths(sellerId);
   const products = await repositories.productRepository.sellectProductsBySeller(sellerId);
 
   await products.forEach(async (product) => {
+    const { url, parentId } = product;
+
+    const { price, name } = await getSingleProductDataFromMasterUrl(url, crawlerPaths);
+    const productToSave = {
+      ...product,
+      price,
+    };
+
+    const masterProductToSave = {
+      parentId,
+      name,
+    };
+
+    await repositories.productRepository.updateSellerProduct(productToSave);
+    await repositories.productRepository.updateMasterProduct(masterProductToSave);
+    fastify.log.info(productToSave);
+    return productToSave;
+  });
+};
+
+const processCompetitorProducts = async (sellerId, repositories, fastify) => {
+  const crawlerPaths = await repositories.crawlerRepository.selectCrawlerPaths(sellerId);
+  const products = await repositories.productRepository.sellectProductsBySeller(sellerId);
+
+  for (const product of products) {
     const { url } = product;
+
+    fastify.log.info(`CRAWLING PAGE: ${url}`);
 
     const { price, sku } = await getSingleProductDataFromUrl(url, crawlerPaths);
     const productToSave = {
@@ -35,10 +90,11 @@ const processSellerProducts = async (sellerId, repositories, fastify) => {
       price,
       sku,
     };
+    fastify.log.info(`PRICE UPDATED: ${price}`);
+
     await repositories.productRepository.updateSellerProduct(productToSave);
-    fastify.log.info(productToSave);
-    return productToSave;
-  });
+    await waitforme(500);
+  }
 };
 
-module.exports = { getSingleProductDataFromUrl, processSellerProducts };
+module.exports = { processAllyProducts, processCompetitorProducts };

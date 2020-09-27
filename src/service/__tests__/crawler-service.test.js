@@ -1,9 +1,9 @@
 const { crawlerService } = require('../crawler-service');
-const { getAllSellers } = require('../../use-cases/get-sellers');
+const { getCompetitorSellers } = require('../../use-cases/get-sellers');
 const { processSellerProducts } = require('../../use-cases/process-seller-products');
 
 jest.mock('../../use-cases/get-sellers', () => ({
-  getAllSellers: jest.fn().mockResolvedValue([{ id: 'foo' }, { id: 'foo' }]),
+  getCompetitorSellers: jest.fn().mockResolvedValue([{ id: 'foo' }, { id: 'foo' }]),
 }));
 
 jest.mock('../../use-cases/process-seller-products', () => ({
@@ -19,7 +19,7 @@ describe('Should call service', () => {
 
   it('should call use case', async () => {
     await crawlerService(fastify);
-    expect(getAllSellers).toHaveBeenCalled();
+    expect(getCompetitorSellers).toHaveBeenCalled();
     expect(processSellerProducts).toHaveBeenCalledTimes(2);
   });
 });

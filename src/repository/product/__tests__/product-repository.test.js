@@ -36,6 +36,7 @@ describe('Product repository', () => {
 
       await productRepository.updateSellerProduct(product);
 
+      expect(fastify.mongo.db.collection).toHaveBeenCalledWith('products');
       expect(fastify.mongo.db.save).toHaveBeenCalledWith(product);
     });
   });

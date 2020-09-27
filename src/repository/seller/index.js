@@ -6,8 +6,12 @@ class SellerRepository {
     this.repository = makeRepository(fastify);
   }
 
-  selectAll() {
-    return this.repository.selectAll();
+  selectAllies() {
+    return this.repository.selectAllies();
+  }
+
+  selectCompetitors() {
+    return this.repository.selectCompetitors();
   }
 }
 

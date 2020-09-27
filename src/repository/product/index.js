@@ -10,6 +10,10 @@ class ProductRepository {
     return this.repository.updateSellerProduct(product);
   }
 
+  updateMasterProduct(product) {
+    return this.repository.updateMasterProduct(product);
+  }
+
   sellectProductsBySeller(sellerId) {
     return this.repository.sellectProductsBySeller(sellerId);
   }

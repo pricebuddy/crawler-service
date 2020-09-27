@@ -14,7 +14,7 @@ fastify.register(fastifyCron, {
   jobs: [
     {
 
-      cronTime: '*/1 * * * *', // every 1 min
+      cronTime: '*/30 * * * *', // every 1 min
       onTick: async (server) => {
         server.log.info('Cron tick');
         const result = await crawlerService(server);

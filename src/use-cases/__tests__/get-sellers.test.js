@@ -1,8 +1,8 @@
-const { getAllSellers } = require('../get-sellers');
+const { getCompetitorSellers } = require('../get-sellers');
 
 const mockDomainRepositories = {
   sellerRepository: {
-    selectAll: jest.fn(),
+    selectCompetitors: jest.fn(),
   },
 };
 
@@ -17,10 +17,10 @@ describe('Should crawl single page', () => {
       },
     ];
 
-    mockDomainRepositories.sellerRepository.selectAll.mockReturnValue(sellers);
+    mockDomainRepositories.sellerRepository.selectCompetitors.mockReturnValue(sellers);
 
-    await getAllSellers(mockDomainRepositories);
+    await getCompetitorSellers(mockDomainRepositories);
 
-    expect(mockDomainRepositories.sellerRepository.selectAll).toHaveBeenCalled();
+    expect(mockDomainRepositories.sellerRepository.selectCompetitors).toHaveBeenCalled();
   });
 });

@@ -22,7 +22,7 @@ describe('Seller repository', () => {
 
   describe('Product repository tests', () => {
     it('should call find all sellers', async () => {
-      await sellerRepository.selectAll();
+      await sellerRepository.selectCompetitors();
 
       expect(fastify.mongo.db.find).toHaveBeenCalled();
     });

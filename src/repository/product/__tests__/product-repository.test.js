@@ -11,8 +11,9 @@ describe('Product repository', () => {
     fastify.mongo = {
       db: {
         collection: jest.fn().mockReturnThis(),
-        find: jest.fn(),
+        find: jest.fn().mockReturnThis(),
         save: jest.fn(),
+        toArray: jest.fn(),
       },
     };
     productRepository = new ProductRepository(fastify);

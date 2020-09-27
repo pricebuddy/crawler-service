@@ -6,6 +6,10 @@ jest.mock('../../use-cases/get-sellers', () => ({
   getCompetitorSellers: jest.fn().mockResolvedValue([{ id: 'foo' }, { id: 'foo' }]),
 }));
 
+jest.mock('../../use-cases/get-sellers', () => ({
+  getAllySellers: jest.fn().mockResolvedValue([{ id: 'foo' }, { id: 'foo' }]),
+}));
+
 jest.mock('../../use-cases/process-seller-products', () => ({
   processSellerProducts: jest.fn().mockResolvedValue({ id: 'foo' }),
 }));

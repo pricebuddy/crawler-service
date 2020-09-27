@@ -3,7 +3,7 @@ const Fastify = require('fastify');
 
 jest.mock('axios');
 
-const { getSingleProductDataFromUrl, processSellerProducts } = require('../process-seller-products');
+const { processCompetitorProducts } = require('../process-seller-products');
 const testData = require('./parisResponse');
 
 const mockDomainRepositories = {
@@ -18,7 +18,8 @@ const mockDomainRepositories = {
 };
 
 const fakeCrawlerPaths = {
-  pricePath: 'string(//div[@class=\'item-price offer-price price-tc cencosud-price-2\']/text())',
+  internetPricePath: 'string(//div[@class=\'item-price offer-price price-tc cencosud-price-2\']/text())',
+  cardPricePath: 'string(//div[@class=\'item-price offer-price price-tc cencosud-price-2\']/text())',
   skuPath: 'string(//p[@class=\'pull-right\']/text())',
 };
 
@@ -41,22 +42,6 @@ describe('Should crawl single page', () => {
     fastify = Fastify();
   });
 
-  it('should get info from a url and get name and price', async () => {
-    const url = 'http://foo.bar/product1';
-    const crawlerPaths = {
-      pricePath: 'string(//div[@class=\'item-price offer-price price-tc cencosud-price-2\']/text())',
-      skuPath: 'string(//p[@class=\'pull-right\']/text())',
-    };
-
-    axios.get.mockImplementationOnce(() => Promise.resolve({ data: testData }));
-
-    const result = await getSingleProductDataFromUrl(url, crawlerPaths);
-
-    expect(axios.get).toHaveBeenCalledWith('http://foo.bar/product1');
-    expect(result.price).toBe('179990');
-    expect(result.sku).toBe('505664999');
-  });
-
   it('should process seller products', async () => {
     const sellerId = 'something';
 
@@ -64,7 +49,7 @@ describe('Should crawl single page', () => {
     mockDomainRepositories.productRepository.sellectProductsBySeller.mockReturnValue(fakeProducts);
     mockDomainRepositories.crawlerRepository.selectCrawlerPaths.mockReturnValue(fakeCrawlerPaths);
 
-    await processSellerProducts(sellerId, mockDomainRepositories, fastify);
+    await processCompetitorProducts(sellerId, mockDomainRepositories, fastify);
 
     expect(mockDomainRepositories.crawlerRepository.selectCrawlerPaths)
       .toHaveBeenCalledWith(sellerId);

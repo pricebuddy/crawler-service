@@ -26,7 +26,7 @@ const getSingleProductDataFromMasterUrl = async (url, crawlerPaths) => {
     errorHandler: docSilentHandler,
   }).parseFromString(response.data);
   product.name = xpath.select(namePath, doc).trim();
-  product.price = xpath.select(pricePath, doc).trim().split('$')[1].replace(/\./g, '');
+  product.price = xpath.select(pricePath, doc).trim().split('$')[1].replace('(Oferta)', '').replace(/\./g, '');
   return product;
 };
 
@@ -54,8 +54,10 @@ const processAllyProducts = async (sellerId, repositories, fastify) => {
   const crawlerPaths = await repositories.crawlerRepository.selectCrawlerPaths(sellerId);
   const products = await repositories.productRepository.sellectProductsBySeller(sellerId);
 
-  await products.forEach(async (product) => {
-    const { url, parentId } = product;
+  for (const product of products) {
+    const { url } = product;
+
+    fastify.log.info(`CRAWLING PAGE: ${url}`);
 
     const { price, name } = await getSingleProductDataFromMasterUrl(url, crawlerPaths);
     const productToSave = {
@@ -64,15 +66,15 @@ const processAllyProducts = async (sellerId, repositories, fastify) => {
     };
 
     const masterProductToSave = {
-      parentId,
+      id: product.parentId,
       name,
     };
 
-    await repositories.productRepository.updateSellerProduct(productToSave);
-    await repositories.productRepository.updateMasterProduct(masterProductToSave);
-    fastify.log.info(productToSave);
-    return productToSave;
-  });
+    fastify.log.info(`PRICE UPDATED: ${price}`);
+
+    await Promise.all([repositories.productRepository.updateSellerProduct(productToSave),
+      repositories.productRepository.updateMasterProduct(masterProductToSave)]);
+  }
 };
 
 const processCompetitorProducts = async (sellerId, repositories, fastify) => {
